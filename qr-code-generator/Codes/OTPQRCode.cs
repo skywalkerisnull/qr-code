@@ -27,6 +27,8 @@ public class OTPQRCode : BaseQRCode
     [Range(0, int.MaxValue, ErrorMessage = "Counter must be non-negative for HOTP.")]
     public int Counter { get; set; } = 0;
 
+    private const string _qrTypeString = "otpauth://";
+
     public OTPQRCode(string uri) : base(uri)
     {
         if (string.IsNullOrWhiteSpace(uri))
@@ -117,7 +119,8 @@ public class OTPQRCode : BaseQRCode
         var algorithmString = Algorithm.ToString().ToUpper();
 
         var uriBuilder = new StringBuilder();
-        uriBuilder.Append($"otpauth://{typeString}/{issuerEncoded}:{accountNameEncoded}");
+        uriBuilder.Append(_qrTypeString);
+        uriBuilder.Append($"{typeString}/{issuerEncoded}:{accountNameEncoded}");
         uriBuilder.Append($"?secret={secretEncoded}");
         uriBuilder.Append($"&issuer={issuerEncoded}");
         uriBuilder.Append($"&algorithm={algorithmString}");
