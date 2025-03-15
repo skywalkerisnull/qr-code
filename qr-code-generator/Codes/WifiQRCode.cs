@@ -1,14 +1,19 @@
 using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using static QRCoder.PayloadGenerator;
 public class WifiQRCode : BaseQRCode
 {
     [Required(ErrorMessage = "SSID is required.")]
     public string? SSID { get; set; }
 
+    public bool HiddenSSID { get; set; } = false;
+
     public string? Password { get; set; }
 
     public WifiSecurity Security { get; set; } = WifiSecurity.WPA;
+
+    private const string _qrTypeString = "WIFI:";
 
     public WifiQRCode(string uri) : base(uri)
     {
@@ -55,8 +60,8 @@ public class WifiQRCode : BaseQRCode
     public override string ToString()
     {
         var wifiBuilder = new StringBuilder();
-        wifiBuilder.Append("WIFI:");
-        wifiBuilder.Append($"S:{SSID};");
+        wifiBuilder.Append(_qrTypeString);
+        wifiBuilder.Append($"S:{EncodeSSID()};");
         wifiBuilder.Append($"T:{Security};");
         if (!string.IsNullOrWhiteSpace(Password))
         {
@@ -64,6 +69,34 @@ public class WifiQRCode : BaseQRCode
         }
         wifiBuilder.Append(";");
         return wifiBuilder.ToString();
+    }
+
+    private string EncodeSSID()
+    {
+        if (SSID == null)
+        {
+            return string.Empty;
+        }
+
+        var encodedSSID = new StringBuilder();
+        encodedSSID.Append("\\\""); // Start with an escaped double quote
+        foreach (var ch in SSID)
+        {
+            switch (ch)
+            {
+                case ';':
+                    encodedSSID.Append(@"\;");
+                    break;
+                case '\\':
+                    encodedSSID.Append(@"\");
+                    break;
+                default:
+                    encodedSSID.Append(ch);
+                    break;
+            }
+        }
+        encodedSSID.Append("\\\""); // End with an escaped double quote
+        return encodedSSID.ToString();
     }
 
     public override IEnumerable<InputDefinition> GetInputDefinitions()
@@ -130,6 +163,15 @@ public enum WifiSecurity
     WPA,
     [Display(Name = "WEP")]
     WEP,
+    [Display(Name = "WPA2-EAP")]
+    WPA2EAP,
     [Display(Name = "None")]
-    None
+    nopass
+}
+
+struct EapConfiguration
+{
+    string EapMethod;
+    string Identity;
+    string PhaseTwoMethod;
 }
