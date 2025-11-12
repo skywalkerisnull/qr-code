@@ -29,11 +29,11 @@ jobs:
         with:
           dotnet-version: '10'
 
-      - name: Restore dependencies
-        run: dotnet restore ./qr-code-generator/qr-code-generator.csproj
-
       - name: Restore workloads
         run: dotnet workload install wasm-tools
+
+      - name: Restore dependencies
+        run: dotnet restore ./qr-code-generator/qr-code-generator.csproj
 
       - name: Build
         run: dotnet build ./qr-code-generator/qr-code-generator.csproj -c Release
