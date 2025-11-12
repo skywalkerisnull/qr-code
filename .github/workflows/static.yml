@@ -32,11 +32,17 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./qr-code-generator/qr-code-generator.csproj
 
-      - name: Run unit tests
-        run: dotnet test ./qr-code-generator.Test/qr-code-generator.Test.csproj --no-build --verbosity normal
+      - name: Restore workloads
+        run: dotnet workload restore ./qr-code-generator/qr-code-generator.csproj
 
       - name: Build
-        run: dotnet publish ./qr-code-generator/qr-code-generator.csproj -c Release -o build
+        run: dotnet build ./qr-code-generator/qr-code-generator.csproj -c Release
+
+      - name: Run unit tests
+        run: dotnet test ./qr-code-generator.Test/qr-code-generator.Test.csproj --no-build --verbosity normal -c Release
+
+      - name: Publish
+        run: dotnet publish ./qr-code-generator/qr-code-generator.csproj -c Release -o build --no-build
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
