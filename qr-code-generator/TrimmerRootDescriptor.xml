@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <!-- Preserve all component constructors for Blazor WebAssembly AOT -->
+  <assembly fullname="qr-code-generator">
+    <namespace fullname="qr_code_generator.Layout" preserve="all" />
+    <namespace fullname="qr_code_generator.Pages" preserve="all" />
+  </assembly>
+  
+  <!-- Preserve Blazor runtime types -->
+  <assembly fullname="Microsoft.AspNetCore.Components.WebAssembly">
+    <namespace fullname="Microsoft.AspNetCore.Components" preserve="all" />
+  </assembly>
+</linker>
