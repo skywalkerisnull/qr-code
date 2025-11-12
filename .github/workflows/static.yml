@@ -33,7 +33,7 @@ jobs:
         run: dotnet restore ./qr-code-generator/qr-code-generator.csproj
 
       - name: Restore workloads
-        run: dotnet workload restore ./qr-code-generator/qr-code-generator.csproj
+        run: dotnet workload install wasm-tools
 
       - name: Build
         run: dotnet build ./qr-code-generator/qr-code-generator.csproj -c Release
