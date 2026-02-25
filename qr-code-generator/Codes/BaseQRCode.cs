@@ -1,7 +1,11 @@
+using System.Text;
+
 public abstract class BaseQRCode
 {
     public string Name { get; set; }
     public Dictionary<string, string> Parameters { get; private set; }
+
+    private const string _qrTypeString = "";
 
     public BaseQRCode(string uri)
     {
@@ -37,7 +41,11 @@ public abstract class BaseQRCode
 
     public override string ToString()
     {
-        return $"QR Code Type: {GetType().Name}, Name: {Name}, Parameters: {string.Join(", ", Parameters)}";
+        StringBuilder uriBuilder = new StringBuilder();
+        uriBuilder.Append(_qrTypeString);
+        uriBuilder.Append(string.Join(", ", Parameters));
+
+        return uriBuilder.ToString();
     }
 }
 

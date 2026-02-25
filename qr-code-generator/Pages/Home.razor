@@ -84,6 +84,9 @@
             case QRCodeType.OTP:
                 qrCode = new OTPQRCode(uri.ToString());
                 break;
+            case QRCodeType.WiFi:
+                qrCode = new WifiQRCode(uri.ToString());
+                break;
             default:
                 throw new NotSupportedException($"QR code type '{qrCodeType}' is not supported.");
         }
